@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<script>
+
+        $(document).ready(function(){
+        $("button").click(function(){
+
+            $.ajax({
+                url: "https://localhost:7183/api/Employee/", 
+                dataType:"json",
+                success: function(result){
+
+                    for(let item of result){
+                        document.getElementById("h").innerHTML+=item.name +"</br>";
+                    }
+            
+            }});
+        });
+        });
+</script>
+</head>
+<body>
+
+<div id="d1">
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+         
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row"></th>
+            <td id="h"></td>
+           
+          </tr>
+        
+        </tbody>
+      </table>
+</div>
+
+<button>Get External Content</button>
+
+</body>
+</html>
