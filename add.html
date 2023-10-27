@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Function to load employee data
+      function loadEmployeeData() {
+        $.ajax({
+          url: "https://localhost:7183/api/Employee/",
+          dataType: "json",
+          success: function (result) {
+            // ... (same code as before)
+          },
+        });
+      }
+
+      // Function to show the "Add Employee" form
+      function showAddEmployeeForm() {
+        $("#add-employee-form").show();
+      }
+
+      // Function to hide the "Add Employee" form
+      function hideAddEmployeeForm() {
+        $("#add-employee-form").hide();
+      }
+
+      // Event handler for the "Add Employee" button
+      $("#add-btn").click(function () {
+        showAddEmployeeForm();
+      });
+
+      // Event handler for the "Cancel" button in the "Add Employee" form
+      $("#cancel-btn").click(function () {
+        hideAddEmployeeForm();
+      });
+
+      // Event handler for the form submission
+      $("#employee-form").submit(function (e) {
+        e.preventDefault(); // Prevent the default form submission
+
+        const employeeData = {
+          // Extract employee data from the form fields
+          name: $("#name").val(),
+          age: $("#age").val(),
+          addresses: [], // You can populate this with addresses if needed
+        };
+
+        // Make a POST request to add the new employee
+        $.ajax({
+          url: "https://localhost:7183/api/Employee/",
+          method: "POST",
+          contentType: "application/json",
+          data: JSON.stringify(employeeData),
+          success: function () {
+            // Reload the employee data after adding a new employee
+            loadEmployeeData();
+            hideAddEmployeeForm();
+          },
+        });
+      });
+
+      // ... (same code as before)
+
+    });
+  </script>
+</head>
+<body>
+  <div id="d1">
+    <table class="table" id="employee-table">
+      <!-- ... (same code as before) -->
+    </table>
+  </div>
+
+  <button id="add-btn">Add Employee</button>
+
+  <!-- Form for adding a new employee (initially hidden) -->
+  <div id="add-employee-form" style="display: none;">
+    <h2>Add New Employee</h2>
+    <form id="employee-form">
+      <label for="name">Name:</label>
+      <input type="text" id="name" required>
+
+      <label for="age">Age:</label>
+      <input type="number" id="age" required>
+
+      <!-- You can add input fields for addresses here if needed -->
+
+      <button type="submit">Add Employee</button>
+      <button type="button" id="cancel-btn">Cancel</button>
+    </form>
+  </div>
+</body>
+</html>
