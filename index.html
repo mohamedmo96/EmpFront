@@ -1,50 +1,79 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Function to load employee data
+      function loadEmployeeData() {
+        $.ajax({
+          url: "https://localhost:7183/api/Employee/",
+          dataType: "json",
+          success: function (result) {
+            // Clear the employee table
+            $("#employee-table tbody").empty();
 
-<script>
-
-        $(document).ready(function(){
-        $("button").click(function(){
-
-            $.ajax({
-                url: "https://localhost:7183/api/Employee/", 
-                dataType:"json",
-                success: function(result){
-
-                    for(let item of result){
-                        document.getElementById("h").innerHTML+=item.name +"</br>";
-                    }
-            
-            }});
+            // Populate the table with employee data
+            for (let i = 0; i < result.length; i++) {
+              const employee = result[i];
+              const row = `<tr>
+                            <th scope="row">${i + 1}</th>
+                            <td>${employee.name}</td>
+                            <td>
+                              <ul>
+                                ${employee.addresses.map((address) => `<li>${address.description}</li>`).join('')}
+                              </ul>
+                            </td>
+                            <td>
+                              <button class="update-btn" data-employee-id="${employee.id}">Update</button>
+                              <button class="delete-btn" data-employee-id="${employee.id}">Delete</button>
+                            </td>
+                          </tr>`;
+              $("#employee-table tbody").append(row);
+            }
+          },
         });
-        });
-</script>
+      }
+
+      // Load employee data initially
+      loadEmployeeData();
+
+      // Event handler for the "Add" button
+      $("#add-btn").click(function () {
+        // Show a popup or a modal to add a new employee
+        // You can use a library like Bootstrap for modals.
+      });
+
+      // Event handlers for the "Update" and "Delete" buttons
+      $(document).on("click", ".update-btn", function () {
+        const employeeId = $(this).data("employee-id");
+        // Show a popup or a modal to edit the selected employee
+        // You can pre-fill the form with the employee's data.
+      });
+
+      $(document).on("click", ".delete-btn", function () {
+        const employeeId = $(this).data("employee-id");
+        // Send a DELETE request to delete the selected employee by ID.
+        // You can confirm the deletion with a popup or modal.
+      });
+    });
+  </script>
 </head>
 <body>
+  <div id="d1">
+    <table class="table" id="employee-table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Addresses</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
 
-<div id="d1">
-    <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-         
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row"></th>
-            <td id="h"></td>
-           
-          </tr>
-        
-        </tbody>
-      </table>
-</div>
-
-<button>Get External Content</button>
-
+  <button id="add-btn">Add Employee</button>
 </body>
 </html>
